@@ -12,4 +12,8 @@ export default () => ({
   domain: {
     domain_name: process.env.DOMAIN,
   },
+  redisConfiguration: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+  },
 });
