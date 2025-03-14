@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IGenericRepository } from '../../Interface/Repository/generic-repository.interface';
 
@@ -19,26 +16,18 @@ export abstract class GenericRepository<T extends Document>
     }
   }
 
-  async findById(id: string): Promise<T> {
+  async findById(id: string): Promise<T | null> {
     try {
-      const result = await this.model.findById(id);
-      if (!result) {
-        throw new BadRequestException('No Data Found');
-      }
-      return result;
+      return this.model.findById(id);
     } catch (err) {
       console.log(`Error while findingById a : ${err}`);
       throw new InternalServerErrorException();
     }
   }
 
-  async findOne(item: FilterQuery<T>): Promise<T> {
+  async findOne(item: FilterQuery<T>): Promise<T | null> {
     try {
-      const result = await this.model.findOne(item);
-      if (!result) {
-        throw new BadRequestException('No Dat Found');
-      }
-      return result;
+      return this.model.findOne(item);
     } catch (err) {
       console.log(`Error while finding a : ${err}`);
       throw new InternalServerErrorException();

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserRepository } from '../Interface/Repository/user-repository.interface';
@@ -20,6 +20,10 @@ export class TokenUtils implements ITokenUtils {
     refreshToken: string;
   }> {
     const user = await this._userRepository.findById(userId);
+
+    if (!user) {
+      throw new BadRequestException('No user found');
+    }
 
     const payload = {
       userId,
