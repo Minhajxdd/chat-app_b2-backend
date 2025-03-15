@@ -114,7 +114,13 @@ export class AuthService implements IAuthService {
   }
 
   async refreshTokens(req: Request, res: Response): Promise<void> {
-    const responseRefreshToken = req.cookies['refresh_token'] || '';
+    const cookies = req.cookies;
+
+    if (!cookies || !cookies['refresh_token']) {
+      throw new UnauthorizedException('Invalid Refresh Token');
+    }
+
+    const responseRefreshToken = cookies['refresh_token'];
 
     const token = await this._refreshTokenRepository.findOne({
       token: responseRefreshToken,
