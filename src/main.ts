@@ -11,6 +11,14 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  const frontend_url = process.env.FRONT_END || '';
+
+  app.enableCors({
+    origin: [frontend_url],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   
 
   await app.listen(process.env.PORT ?? 3000);
