@@ -16,6 +16,11 @@ import {
       context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
       const request = context.switchToHttp().getRequest();
+
+      if(!request || !request.cookies) {
+        throw new UnauthorizedException('Invalid Token');
+      }
+
       const token = request.cookies['access_token'];
   
       if (!token) {
