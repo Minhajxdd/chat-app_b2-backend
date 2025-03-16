@@ -14,6 +14,9 @@ import {
 import { Message, MessageSchema } from './Database/Schemas/message.schema';
 import { File, FileSchema } from './Database/Schemas/file.schema';
 import { UserOnlineCache } from './Cache/user-online.cache';
+import { ConversationParticipantsRepository } from './Database/Repositories/conversation-participant.repository';
+import { ConversationRepository } from './Database/Repositories/conversation.repository';
+import { MessageRepository } from './Database/Repositories/message.repository';
 
 @Module({
   imports: [
@@ -37,6 +40,13 @@ import { UserOnlineCache } from './Cache/user-online.cache';
     ]),
   ],
   controllers: [ChatController],
-  providers: [ChatService, ChatGateway, UserOnlineCache],
+  providers: [
+    ChatService,
+    ChatGateway,
+    UserOnlineCache,
+    ConversationParticipantsRepository,
+    ConversationRepository,
+    MessageRepository,
+  ],
 })
 export class ChatModule {}

@@ -12,9 +12,7 @@ export class ChatService {
 
   private server: Server;
 
-  constructor(
-    private readonly _userOnlineCache: UserOnlineCache
-  ) {
+  constructor(private readonly _userOnlineCache: UserOnlineCache) {
     const redisConfiguration = {
       host: configuration().redisConfiguration.host,
       port: configuration().redisConfiguration.port,
@@ -28,12 +26,7 @@ export class ChatService {
     this.server = server;
   }
 
-
   async enterRoom(client: Socket, userId: string) {
-    
     await this._userOnlineCache.addUser(client.id, userId);
-    
-    
-
   }
 }
