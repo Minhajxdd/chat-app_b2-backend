@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guards';
 
-@Controller('auth/profile')
-export class AuthProfileController {}
+@UseGuards(AuthGuard)
+@Controller('profile')
+export class AuthProfileController {
+
+    @Get('users')
+    getUsers() {
+        return 'hello users'
+    }
+}

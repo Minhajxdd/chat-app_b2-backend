@@ -154,6 +154,8 @@ export class AuthService implements IAuthService {
   }
 
   async logout(req: Request, res: Response): Promise<void> {
+    console.log(req)
+
     const responseRefreshToken = req.cookies['refresh_token'];
 
     this._cookieUtils.clearCookies(res, ['refresh_token', 'access_token']);

@@ -17,6 +17,8 @@ import {
     ): boolean | Promise<boolean> | Observable<boolean> {
       const request = context.switchToHttp().getRequest();
 
+      console.log(request)
+
       if(!request || !request.cookies) {
         throw new UnauthorizedException('Invalid Token');
       }
