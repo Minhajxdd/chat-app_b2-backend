@@ -23,7 +23,7 @@ export class Message extends Document{
   content: string;
 
   @Prop({ type: Types.ObjectId, ref: 'File', default: null })
-  file: Types.ObjectId;
+  file?: Types.ObjectId;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
