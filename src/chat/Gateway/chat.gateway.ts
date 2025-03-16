@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -9,7 +9,10 @@ import {
 } from '@nestjs/websockets';
 import { ChatService } from '../Services/chat.service';
 import { Server, Socket } from 'socket.io';
+import { AuthWsGuard } from 'src/guards/auth.ws.guard';
 
+
+@UseGuards(AuthWsGuard)
 @WebSocketGateway({
   namespace: 'chats',
   cors: {
