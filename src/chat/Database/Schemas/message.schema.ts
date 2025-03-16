@@ -9,7 +9,7 @@ export enum MessageType {
 }
 
 @Schema({ timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
-export class Message {
+export class Message extends Document{
   @Prop({ type: Types.ObjectId, ref: 'Conversation', required: true })
   conversation: Types.ObjectId;
 
