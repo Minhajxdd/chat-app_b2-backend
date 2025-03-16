@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 import configuration from 'src/config/configuration';
+import { UserOnlineCache } from '../Cache/user-online.cache';
 
 @Injectable()
 export class ChatService {
@@ -11,7 +12,9 @@ export class ChatService {
 
   private server: Server;
 
-  constructor() {
+  constructor(
+    private readonly _userOnlineCache: UserOnlineCache
+  ) {
     const redisConfiguration = {
       host: configuration().redisConfiguration.host,
       port: configuration().redisConfiguration.port,
@@ -23,5 +26,14 @@ export class ChatService {
 
   setServer(server: Server): void {
     this.server = server;
+  }
+
+
+  async enterRoom(client: Socket, userId: string) {
+    
+    await this._userOnlineCache.addUser(client.id, userId);
+    
+    
+
   }
 }

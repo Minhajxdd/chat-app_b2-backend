@@ -13,6 +13,7 @@ import {
 } from './Database/Schemas/conversation-participant.schema';
 import { Message, MessageSchema } from './Database/Schemas/message.schema';
 import { File, FileSchema } from './Database/Schemas/file.schema';
+import { UserOnlineCache } from './Cache/user-online.cache';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { File, FileSchema } from './Database/Schemas/file.schema';
     ]),
   ],
   controllers: [ChatController],
-  providers: [ChatService, ChatGateway],
+  providers: [ChatService, ChatGateway, UserOnlineCache],
 })
 export class ChatModule {}

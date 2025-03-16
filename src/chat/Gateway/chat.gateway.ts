@@ -44,4 +44,12 @@ export class ChatGateway
   handleConnection(client: Socket) {
     this.logger.log(`Client Connected: ${client.id}`);
   }
+
+  @SubscribeMessage('enter-chats')
+  enterRoom(client: Socket): void {
+    const userId = client['user'].userId;
+
+    this._chatService.enterRoom(client, userId);
+  }
+
 }

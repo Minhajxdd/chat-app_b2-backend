@@ -15,7 +15,7 @@ export class UserOnlineCache {
     this._redis = new Redis(redisConfiguration);
   }
 
-  async addMapping(clientId: string, userId: string): Promise<void> {
+  async addUser(clientId: string, userId: string): Promise<void> {
     await this._redis.set(`clientId:${clientId}`, userId);
     await this._redis.set(`userId:${userId}`, clientId);
   }
