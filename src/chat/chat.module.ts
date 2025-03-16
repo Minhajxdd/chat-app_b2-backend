@@ -17,6 +17,7 @@ import { UserOnlineCache } from './Cache/user-online.cache';
 import { ConversationParticipantsRepository } from './Database/Repositories/conversation-participant.repository';
 import { ConversationRepository } from './Database/Repositories/conversation.repository';
 import { MessageRepository } from './Database/Repositories/message.repository';
+import { BuildMessageUtils } from './Utils/build-msg.utils';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { MessageRepository } from './Database/Repositories/message.repository';
     ConversationParticipantsRepository,
     ConversationRepository,
     MessageRepository,
+    BuildMessageUtils
   ],
 })
 export class ChatModule {}
