@@ -11,7 +11,6 @@ import { ChatService } from '../Services/chat.service';
 import { Server, Socket } from 'socket.io';
 import { AuthWsGuard } from 'src/guards/auth.ws.guard';
 
-
 @UseGuards(AuthWsGuard)
 @WebSocketGateway({
   namespace: 'chats',
@@ -52,4 +51,10 @@ export class ChatGateway
     this._chatService.enterRoom(client, userId);
   }
 
+  @SubscribeMessage('message')
+  message(client: Socket, data: { text: string; userId: string }) {
+    const userId = client['user'].userId;
+
+    this._chatService.message(client, data, userId);
+  }
 }
