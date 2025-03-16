@@ -4,7 +4,7 @@ import { ChatService } from "../Services/chat.service";
 import { Server, Socket } from "socket.io";
 
 @WebSocketGateway({
-    namespace: 'chat',
+    namespace: 'chats',
     cors: {
         origin: ['http://localhost:4200'],
         credentials: true,
