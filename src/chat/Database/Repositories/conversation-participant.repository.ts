@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { GenericRepository } from './generic.repository';
 import { ConversationParticipant } from '../Schemas/conversation-participant.schema';
 
@@ -12,4 +12,30 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
   ) {
     super(_conversationParticipantModel);
   }
+
+  async getUserGroupConversations(userId: string) {
+    return await this._conversationParticipantModel.aggregate([
+      {
+        $match: { user: new Types.ObjectId(userId) },
+      },
+      {
+        $lookup: {
+          from: 'conversations',
+          localField: 'conversation',
+          foreignField: '_id',
+          as: 'conversationDetails',
+        },
+      },
+      {
+        $unwind: '$conversationDetails',
+      },
+      {
+        $match: { 'conversationDetails.type': 'group' },
+      },
+      {
+        $replaceRoot: { newRoot: '$conversationDetails' },
+      },
+    ]).exec();
+  }
+  
 }

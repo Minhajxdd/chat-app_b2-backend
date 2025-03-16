@@ -4,6 +4,7 @@ import { Server, Socket } from 'socket.io';
 
 import configuration from 'src/config/configuration';
 import { UserOnlineCache } from '../Cache/user-online.cache';
+import { ConversationParticipantsRepository } from '../Database/Repositories/conversation-participant.repository';
 
 @Injectable()
 export class ChatService {
@@ -12,7 +13,10 @@ export class ChatService {
 
   private server: Server;
 
-  constructor(private readonly _userOnlineCache: UserOnlineCache) {
+  constructor(
+    private readonly _userOnlineCache: UserOnlineCache,
+    private readonly _conversationParticipantsRepository: ConversationParticipantsRepository
+  ) {
     const redisConfiguration = {
       host: configuration().redisConfiguration.host,
       port: configuration().redisConfiguration.port,
@@ -28,5 +32,13 @@ export class ChatService {
 
   async enterRoom(client: Socket, userId: string) {
     await this._userOnlineCache.addUser(client.id, userId);
+
+    const groups = await this._conversationParticipantsRepository.getUserGroupConversations(userId);
+    
+    
+    console.log(groups);
+
+    //Will Implement Later
+
   }
 }
