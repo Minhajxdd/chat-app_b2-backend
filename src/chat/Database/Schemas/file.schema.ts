@@ -1,19 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { Types } from 'mongoose';
+import { FileTypeEnum } from 'src/chat/Types/database-schmea.models';
 
 export type FileDocument = File & Document;
 
-export enum FileTypeEnum {
-  IMAGE = 'image',
-  VIDEO = 'video',
-  AUDIO = 'audio',
-  DOCUMENT = 'document',
-  OTHER = 'other',
-}
-
 @Schema({ timestamps: { createdAt: 'uploadedAt' } })
-export class File extends Document{
+export class File extends Document {
   @Prop({ required: true })
   fileUrl: string;
 

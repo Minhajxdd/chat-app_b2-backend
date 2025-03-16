@@ -1,15 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { MessageType } from 'src/chat/Types/database-schmea.models';
 
 export type MessageDocument = Message & Document;
 
-export enum MessageType {
-  TEXT = 'text',
-  FILE = 'file',
-}
-
 @Schema({ timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
-export class Message extends Document{
+export class Message extends Document {
   @Prop({ type: Types.ObjectId, ref: 'Conversation', required: true })
   conversation: Types.ObjectId;
 

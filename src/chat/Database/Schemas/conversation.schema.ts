@@ -1,12 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-
-export type ConversationDocument = Conversation & Document;
-
-export enum ConversationType {
-  SINGLE = 'single',
-  GROUP = 'group',
-}
+import { ConversationType } from 'src/chat/Types/database-schmea.models';
 
 @Schema({ timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } })
 export class Conversation extends Document {
