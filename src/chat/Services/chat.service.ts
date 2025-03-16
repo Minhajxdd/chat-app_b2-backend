@@ -88,8 +88,8 @@ export class ChatService {
 
 
   } catch(err) {
-    throw new InternalServerErrorException();
     console.log(`Error on message on chat service: ${err}`);
+    throw new InternalServerErrorException();
   }
 
   }

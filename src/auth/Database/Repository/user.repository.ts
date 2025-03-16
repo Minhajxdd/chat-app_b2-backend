@@ -13,4 +13,13 @@ export class UserRepository
   constructor(@InjectModel(User.name) private _userModel: Model<User>) {
     super(_userModel);
   }
+
+  findAllUsers(): Promise<User[]> {
+    return this._userModel.find(
+      { isBlocked: false },
+      {
+        fullName: 1,
+      },
+    );
+  }
 }

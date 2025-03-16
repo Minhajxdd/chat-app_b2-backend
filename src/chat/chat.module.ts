@@ -48,7 +48,7 @@ import { BuildMessageUtils } from './Utils/build-msg.utils';
     ConversationParticipantsRepository,
     ConversationRepository,
     MessageRepository,
-    BuildMessageUtils
+    BuildMessageUtils,
   ],
 })
 export class ChatModule {}
