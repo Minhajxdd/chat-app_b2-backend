@@ -25,6 +25,7 @@ import {
   RequestChat,
   RequestChatSchema,
 } from './Database/Schemas/request-chat.schmea';
+import { RequestChatRepository } from './Database/Repositories/request-chat.repository';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import {
     BuildMessageUtils,
     ChatDetailsRepository,
     ChatHttpService,
+    RequestChatRepository
   ],
 })
 export class ChatModule {}
