@@ -56,5 +56,6 @@ import { AuthProfileService } from './Service/auth.profile.service';
     },
     AuthProfileService
   ],
+  exports: ['UserRepository']
 })
 export class AuthModule {}
