@@ -41,4 +41,12 @@ export class ChatController {
 
     return this._chatHttpService.findConversation(userId, otherUserId);
   }
+
+  @Post('request-conversation')
+  requestConversation(@Request() req, @Body() data: ChatFindConversaton) {
+    const userId = String(req.user.userId);
+    const { otherUserId } = data;
+
+    return this._chatHttpService.requestConversation(userId, otherUserId);
+  }
 }
