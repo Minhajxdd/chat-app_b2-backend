@@ -19,6 +19,7 @@ import { ConversationRepository } from './Database/Repositories/conversation.rep
 import { MessageRepository } from './Database/Repositories/message.repository';
 import { BuildMessageUtils } from './Utils/build-msg.utils';
 import { AuthModule } from 'src/auth/auth.module';
+import { ChatDetailsRepository } from './Database/Repositories/chat-details.repository';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { AuthModule } from 'src/auth/auth.module';
     ConversationRepository,
     MessageRepository,
     BuildMessageUtils,
+    ChatDetailsRepository
   ],
 })
 export class ChatModule {}
