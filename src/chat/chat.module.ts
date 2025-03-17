@@ -18,6 +18,7 @@ import { ConversationParticipantsRepository } from './Database/Repositories/conv
 import { ConversationRepository } from './Database/Repositories/conversation.repository';
 import { MessageRepository } from './Database/Repositories/message.repository';
 import { BuildMessageUtils } from './Utils/build-msg.utils';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { BuildMessageUtils } from './Utils/build-msg.utils';
         schema: FileSchema,
       },
     ]),
+    AuthModule,
   ],
   controllers: [ChatController],
   providers: [
