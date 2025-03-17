@@ -20,6 +20,7 @@ import { MessageRepository } from './Database/Repositories/message.repository';
 import { BuildMessageUtils } from './Utils/build-msg.utils';
 import { AuthModule } from 'src/auth/auth.module';
 import { ChatDetailsRepository } from './Database/Repositories/chat-details.repository';
+import { ChatHttpService } from './Services/chat-http.service';
 
 @Module({
   imports: [
@@ -52,7 +53,8 @@ import { ChatDetailsRepository } from './Database/Repositories/chat-details.repo
     ConversationRepository,
     MessageRepository,
     BuildMessageUtils,
-    ChatDetailsRepository
+    ChatDetailsRepository,
+    ChatHttpService
   ],
 })
 export class ChatModule {}

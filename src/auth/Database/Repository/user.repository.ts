@@ -22,4 +22,17 @@ export class UserRepository
       },
     );
   }
+
+  findByFullName(fullName: string, limit: number): Promise<User[]> {
+    return this._userModel
+      .find(
+        { fullName: new RegExp(fullName, 'i') },
+        {
+          fullName: 1,
+          email: 1,
+        },
+      )
+      .limit(limit)
+      .exec();
+  }
 }
