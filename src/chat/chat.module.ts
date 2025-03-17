@@ -21,6 +21,10 @@ import { BuildMessageUtils } from './Utils/build-msg.utils';
 import { AuthModule } from 'src/auth/auth.module';
 import { ChatDetailsRepository } from './Database/Repositories/chat-details.repository';
 import { ChatHttpService } from './Services/chat-http.service';
+import {
+  RequestChat,
+  RequestChatSchema,
+} from './Database/Schemas/request-chat.schmea';
 
 @Module({
   imports: [
@@ -41,6 +45,10 @@ import { ChatHttpService } from './Services/chat-http.service';
         name: File.name,
         schema: FileSchema,
       },
+      {
+        name: RequestChat.name,
+        schema: RequestChatSchema,
+      },
     ]),
     AuthModule,
   ],
@@ -54,7 +62,7 @@ import { ChatHttpService } from './Services/chat-http.service';
     MessageRepository,
     BuildMessageUtils,
     ChatDetailsRepository,
-    ChatHttpService
+    ChatHttpService,
   ],
 })
 export class ChatModule {}
