@@ -23,15 +23,21 @@ export class UserRepository
     );
   }
 
-  findByFullName(fullName: string, limit: number): Promise<User[]> {
+  findByFullName(
+    userId: string,
+    fullName: string,
+    limit: number,
+  ): Promise<User[]> {
+    const query: any = {
+      fullName: new RegExp(fullName, 'i'),
+      _id: { $ne: userId },
+    };
+
     return this._userModel
-      .find(
-        { fullName: new RegExp(fullName, 'i') },
-        {
-          fullName: 1,
-          email: 1,
-        },
-      )
+      .find(query, {
+        fullName: 1,
+        email: 1,
+      })
       .limit(limit)
       .exec();
   }

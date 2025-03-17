@@ -14,28 +14,77 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
   }
 
   async getUserGroupConversations(userId: string) {
-    return await this._conversationParticipantModel.aggregate([
+    return await this._conversationParticipantModel
+      .aggregate([
+        {
+          $match: { user: new Types.ObjectId(userId) },
+        },
+        {
+          $lookup: {
+            from: 'conversations',
+            localField: 'conversation',
+            foreignField: '_id',
+            as: 'conversationDetails',
+          },
+        },
+        {
+          $unwind: '$conversationDetails',
+        },
+        {
+          $match: { 'conversationDetails.type': 'group' },
+        },
+        {
+          $replaceRoot: { newRoot: '$conversationDetails' },
+        },
+      ])
+      .exec();
+  }
+
+  async findSingleConversation(currentUserId: string, otherUserId: string) {
+    return this._conversationParticipantModel.aggregate([
       {
-        $match: { user: new Types.ObjectId(userId) },
+        $match: {
+          user: {
+            $in: [
+              new Types.ObjectId(currentUserId),
+              new Types.ObjectId(otherUserId),
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$conversation',
+          users: { $addToSet: '$user' },
+        },
+      },
+      {
+        $match: {
+          users: { $size: 2 },
+        },
       },
       {
         $lookup: {
           from: 'conversations',
-          localField: 'conversation',
+          localField: '_id',
           foreignField: '_id',
-          as: 'conversationDetails',
+          as: 'conversation',
         },
       },
       {
-        $unwind: '$conversationDetails',
+        $unwind: '$conversation',
       },
       {
-        $match: { 'conversationDetails.type': 'group' },
+        $match: {
+          'conversation.type': 'single',
+        },
       },
-      {
-        $replaceRoot: { newRoot: '$conversationDetails' },
-      },
-    ]).exec();
+      // {
+      //   $project: {
+      //     _id: '$conversation._id',
+      //     type: '$conversation.type',
+      //   },
+      // },
+    ]);
   }
-  
 }
