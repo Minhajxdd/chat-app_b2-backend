@@ -10,6 +10,8 @@ import {
 import { ChatService } from '../Services/chat.service';
 import { Server, Socket } from 'socket.io';
 import { AuthWsGuard } from 'src/guards/auth.ws.guard';
+import { ConversationType } from '../Types/database-schmea.models';
+import { MessageDto } from '../Dto/chat-gateway-message.dto';
 
 @UseGuards(AuthWsGuard)
 @WebSocketGateway({
@@ -52,7 +54,7 @@ export class ChatGateway
   }
 
   @SubscribeMessage('message')
-  message(client: Socket, data: { text: string; userId: string }) {
+  message(client: Socket, data: MessageDto) {
     const userId = client['user'].userId;
 
     this._chatService.message(client, data, userId);

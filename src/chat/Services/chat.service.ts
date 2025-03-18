@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import Redis from 'ioredis';
 import { Server, Socket } from 'socket.io';
 
@@ -6,6 +10,7 @@ import configuration from 'src/config/configuration';
 import { UserOnlineCache } from '../Cache/user-online.cache';
 import { ConversationParticipantsRepository } from '../Database/Repositories/conversation-participant.repository';
 import { BuildMessageUtils } from '../Utils/build-msg.utils';
+import { MessageDto } from '../Dto/chat-gateway-message.dto';
 
 @Injectable()
 export class ChatService {
@@ -17,7 +22,7 @@ export class ChatService {
   constructor(
     private readonly _userOnlineCache: UserOnlineCache,
     private readonly _conversationParticipantsRepository: ConversationParticipantsRepository,
-    private readonly _buildMessageUtils: BuildMessageUtils
+    private readonly _buildMessageUtils: BuildMessageUtils,
   ) {
     const redisConfiguration = {
       host: configuration().redisConfiguration.host,
@@ -26,7 +31,6 @@ export class ChatService {
 
     this._pub = new Redis(redisConfiguration);
     this._sub = new Redis(redisConfiguration);
-
 
     this._sub.subscribe('chatEvent', (err) => {
       if (err) console.error('Error subscribing to chatEvent:', err);
@@ -49,7 +53,6 @@ export class ChatService {
         }
       }
     });
-
   }
 
   setServer(server: Server): void {
@@ -61,37 +64,37 @@ export class ChatService {
 
     client.join(userId);
 
-    const groups = await this._conversationParticipantsRepository.getUserGroupConversations(userId);
-    
-    
+    const groups =
+      await this._conversationParticipantsRepository.getUserGroupConversations(
+        userId,
+      );
+
     console.log(groups);
 
     //Will Implement Later
-
   }
 
-  async message(client: Socket, data: { text: string; userId: string }, userId: string) {
-    try {
+  async message(client: Socket, data: MessageDto, userId: string) {
+    const { conversationId, text, type } = data;
 
-    const buildedMessage = this._buildMessageUtils.buildMsg(userId, data.text);
-
-      console.log(buildedMessage, 'new message recieved');
-
-    this._pub.publish(
-      'chatEvent',
-      JSON.stringify({
-        event: 'message',
-        room: data.userId,
-        data: buildedMessage,
-      }),
+    const buildedMessage = this._buildMessageUtils.buildMsg(
+      conversationId,
+      text,
     );
 
+    if (type === 'single') {
+      if (!data.userId) {
+        throw new BadRequestException();
+      }
 
-  } catch(err) {
-    console.log(`Error on message on chat service: ${err}`);
-    throw new InternalServerErrorException();
+      this._pub.publish(
+        'chatEvent',
+        JSON.stringify({
+          event: 'message',
+          room: data.userId,
+          data: buildedMessage,
+        }),
+      );
+    }
   }
-
-  }
-
 }

@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class BuildMessageUtils {
-  buildMsg(userId: string, text: string) {
+  buildMsg(conversation: string, text: string) {
     return {
-      senderId: userId,
+      conversation,
       text,
       time: new Intl.DateTimeFormat('default', {
         hour: 'numeric',
