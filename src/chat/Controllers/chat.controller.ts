@@ -18,8 +18,16 @@ import { RequestActionsDto } from '../Dto/request-actions.dto';
 export class ChatController {
   constructor(private readonly _chatHttpService: ChatHttpService) {}
 
+  @Get('conversation')
+  getConversations(
+    @Request() req
+  ) {
+    const userId = String(req.user.userId);
+    return this._chatHttpService.getConversations(userId);
+  }
+
   @Get('search-users')
-  async searchUsers(
+  searchUsers(
     @Request() req,
     @Query('name') name?: string,
     @Query('limit') limit?: string,

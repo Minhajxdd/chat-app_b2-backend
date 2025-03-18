@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import mongoose, { Model, Types } from 'mongoose';
 import { GenericRepository } from './generic.repository';
 import { ConversationParticipant } from '../Schemas/conversation-participant.schema';
 
@@ -79,12 +79,68 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
           'conversation.type': 'single',
         },
       },
-      // {
-      //   $project: {
-      //     _id: '$conversation._id',
-      //     type: '$conversation.type',
-      //   },
-      // },
+    ]);
+  }
+
+  async getConversationWithUserId(userId: string) {
+    return this._conversationParticipantModel.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $lookup: {
+          from: 'conversations',
+          localField: 'conversation',
+          foreignField: '_id',
+          as: 'conversation',
+        },
+      },
+      {
+        $lookup: {
+          from: 'conversationparticipants',
+          localField: 'conversation._id',
+          foreignField: 'conversation',
+          as: 'participants',
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'participants.user',
+          foreignField: '_id',
+          as: 'users',
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          'users.fullName': 1,
+          'users.email': 1,
+          'users._id': 1,
+          participantsLength: { $size: '$participants' },
+          conversation: 1,
+        },
+      },
+      {
+        $set: {
+          users: {
+            $slice: [
+              {
+                $filter: {
+                  input: '$users',
+                  as: 'user',
+                  cond: {
+                    $ne: ['$$user._id', new mongoose.Types.ObjectId(userId)],
+                  },
+                },
+              },
+              1,
+            ],
+          },
+        },
+      },
     ]);
   }
 }

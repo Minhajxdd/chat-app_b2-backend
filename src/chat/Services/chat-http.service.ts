@@ -144,4 +144,22 @@ export class ChatHttpService {
       throw new InternalServerErrorException();
     }
   }
+
+  async getConversations(userId: string) {
+    try {
+      const data: any =
+        await this._conversationParticipantsRepository.getConversationWithUserId(
+          userId,
+        );
+
+      return {
+        status: 'success',
+        message: 'successfully fetched data',
+        data,
+      };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException();
+    }
+  }
 }
