@@ -26,6 +26,10 @@ import {
   RequestChatSchema,
 } from './Database/Schemas/request-chat.schmea';
 import { RequestChatRepository } from './Database/Repositories/request-chat.repository';
+import {
+  ChatGroup,
+  ChatGroupSchema,
+} from './Database/Schemas/chat-group.schmea';
 
 @Module({
   imports: [
@@ -50,6 +54,10 @@ import { RequestChatRepository } from './Database/Repositories/request-chat.repo
         name: RequestChat.name,
         schema: RequestChatSchema,
       },
+      {
+        name: ChatGroup.name,
+        schema: ChatGroupSchema,
+      },
     ]),
     AuthModule,
   ],
@@ -64,7 +72,7 @@ import { RequestChatRepository } from './Database/Repositories/request-chat.repo
     BuildMessageUtils,
     ChatDetailsRepository,
     ChatHttpService,
-    RequestChatRepository
+    RequestChatRepository,
   ],
 })
 export class ChatModule {}
