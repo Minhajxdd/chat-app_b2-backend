@@ -79,6 +79,7 @@ export class ChatService {
 
     const buildedMessage = this._buildMessageUtils.buildMsg(
       conversationId,
+      userId,
       text,
     );
 
