@@ -76,4 +76,23 @@ export class ChatHttpService {
       throw new InternalServerErrorException();
     }
   }
+
+  async getChatRequests(userId: string) {
+    try {
+      const LIMIT = 3;
+      const requests = await this._requestChatRepository.findRequestsByUserId(
+        userId,
+        LIMIT,
+      );
+
+      return {
+        status: 'success',
+        message: 'successfully fetched data',
+        data: requests,
+      };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException();
+    }
+  }
 }

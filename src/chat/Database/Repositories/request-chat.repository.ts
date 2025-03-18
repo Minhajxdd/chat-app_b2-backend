@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { GenericRepository } from './generic.repository';
 import { RequestChat } from '../Schemas/request-chat.schmea';
 
@@ -11,5 +11,17 @@ export class RequestChatRepository extends GenericRepository<RequestChat> {
     private _requestChatModel: Model<RequestChat>,
   ) {
     super(_requestChatModel);
+  }
+
+  findRequestsByUserId(userId: string, limit: number) {
+    return this._requestChatModel
+      .find({
+        requestedTo: new mongoose.Types.ObjectId(userId),
+      })
+      .populate({
+        path: "requestedBy",
+        select: "fullName email",
+      })
+      .limit(limit);
   }
 }

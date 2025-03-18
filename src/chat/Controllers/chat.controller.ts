@@ -49,4 +49,11 @@ export class ChatController {
 
     return this._chatHttpService.requestConversation(userId, otherUserId);
   }
+
+  @Get('requests')
+  getChatRequests(@Request() req) {
+    const userId = String(req.user.userId);
+
+    return this._chatHttpService.getChatRequests(userId);
+  }
 }
