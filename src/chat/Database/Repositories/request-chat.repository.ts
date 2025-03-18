@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, mongo } from 'mongoose';
 import { GenericRepository } from './generic.repository';
 import { RequestChat } from '../Schemas/request-chat.schmea';
 
@@ -19,9 +19,16 @@ export class RequestChatRepository extends GenericRepository<RequestChat> {
         requestedTo: new mongoose.Types.ObjectId(userId),
       })
       .populate({
-        path: "requestedBy",
-        select: "fullName email",
+        path: 'requestedBy',
+        select: 'fullName email',
       })
       .limit(limit);
+  }
+
+  findRequestAndDelete(userId: string, requestId: string) {
+    return this._requestChatModel.findOneAndDelete({
+      requestedTo: new mongoose.Types.ObjectId(userId),
+      _id: new mongoose.Types.ObjectId(requestId),
+    }).lean();
   }
 }

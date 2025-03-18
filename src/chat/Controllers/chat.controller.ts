@@ -11,6 +11,7 @@ import {
 import { ChatHttpService } from '../Services/chat-http.service';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { ChatFindConversaton } from '../Dto/chat-find-conversation.dto';
+import { RequestActionsDto } from '../Dto/request-actions.dto';
 
 @UseGuards(AuthGuard)
 @Controller('chat')
@@ -55,5 +56,12 @@ export class ChatController {
     const userId = String(req.user.userId);
 
     return this._chatHttpService.getChatRequests(userId);
+  }
+
+  @Post('requests-actions')
+  acceptRequests(@Body() data: RequestActionsDto, @Request() req) {
+    const userId = String(req.user.userId);
+
+    return this._chatHttpService.acceptRequests(userId, data);
   }
 }
