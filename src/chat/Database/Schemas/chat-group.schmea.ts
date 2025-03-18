@@ -3,6 +3,9 @@ import { Document, Types } from 'mongoose';
 
 @Schema()
 export class ChatGroup extends Document {
+  @Prop({ type: Types.ObjectId, ref: 'Conversation', required: true })
+  conversation: Types.ObjectId;
+
   @Prop({ type: String, required: true })
   title: string;
 
