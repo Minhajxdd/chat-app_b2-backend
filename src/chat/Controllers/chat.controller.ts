@@ -82,12 +82,18 @@ export class ChatController {
   }
 
   @Get('conversation/messages')
-  getConversationMessage(
-    @Query('id')
-    conversationId: string,
+  async getConversationMessages(
+    @Query('id') conversationId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
   ) {
-    if(!conversationId) throw new BadRequestException('Id Is Needed');
-
-    return this._chatHttpMessageService.getConversationMessage(conversationId);
+    if (!conversationId) {
+      throw new BadRequestException('Id is needed');
+    }
+    return this._chatHttpMessageService.getConversationMessages(
+      conversationId,
+      page,
+      limit,
+    );
   }
 }

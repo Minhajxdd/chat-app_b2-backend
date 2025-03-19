@@ -13,11 +13,13 @@ export class MessageRepository extends GenericRepository<Message> {
     super(_messageModel);
   }
 
-  getConversationsMessage(conversationId: string, limit: number) {
+  getConversationsMessage(conversationId: string, skip: number, limit: number) {
     const query = {
       conversation: new mongoose.Types.ObjectId(conversationId),
     };
-
-    return this._messageModel.find(query).limit(limit).lean();
+  
+    return this._messageModel.find(query).skip(skip).limit(limit).lean();
   }
+  
+  
 }
