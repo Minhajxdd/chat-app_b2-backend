@@ -6,8 +6,20 @@ export class BuildMessageUtils {
     return {
       sender,
       conversation,
-      text,
-      time: new Date(),
+      content: text,
+      createdAt: new Date(),
     };
   }
+}
+
+export interface ChatMessageModel {
+  content: string;
+  conversation: string;
+  createdAt: string;
+  file?: null;
+  messageType: string;
+  sender: string;
+  updatedAt?: string;
+  __v?: number;
+  _id?: string;
 }

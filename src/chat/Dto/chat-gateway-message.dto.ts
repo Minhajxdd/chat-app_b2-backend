@@ -4,16 +4,16 @@ import { ConversationType } from '../Types/database-schmea.models';
 export class MessageDto {
   @IsString()
   @IsNotEmpty()
-  text: string;
+  content: string;
 
   @IsString()
   @IsNotEmpty()
-  conversationId: string;
+  conversation: string;
 
   @IsString()
   userId?: string;
 
   @IsString()
   @IsEnum(ConversationType, { message: 'must be a valid type' })
-  type: ConversationType;
+  messageType: ConversationType;
 }

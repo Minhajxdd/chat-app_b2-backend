@@ -79,26 +79,28 @@ export class ChatService {
   }
 
   async message(client: Socket, data: MessageDto, userId: string) {
-    const { conversationId, text, type } = data;
+    const { content, conversation, messageType} = data;
 
     const buildedMessage = this._buildMessageUtils.buildMsg(
-      conversationId,
+      conversation,
       userId,
-      text,
+      content,
     );
 
-    if (type === 'single') {
+    if (messageType === 'single') {
       if (!data.userId) {
         throw new BadRequestException();
       }
 
       // Temporory storing will update will more robost techiniques sooner
       await this._messageRepository.create({
-        conversation: new mongoose.Types.ObjectId(conversationId),
+        conversation: new mongoose.Types.ObjectId(conversation),
         sender: new mongoose.Types.ObjectId(userId),
         messageType: MessageType.TEXT,
-        content: text,
+        content,
       });
+
+      
 
       this._pub.publish(
         'chatEvent',
