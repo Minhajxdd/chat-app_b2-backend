@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { GenericRepository } from './generic.repository';
 import { Message } from '../Schemas/message.schema';
 
@@ -15,7 +15,7 @@ export class MessageRepository extends GenericRepository<Message> {
 
   getConversationsMessage(conversationId: string, limit: number) {
     const query = {
-      conversation: conversationId,
+      conversation: new mongoose.Types.ObjectId(conversationId),
     };
 
     return this._messageModel.find(query).limit(limit).lean();
