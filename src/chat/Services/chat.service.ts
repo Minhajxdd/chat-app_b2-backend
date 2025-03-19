@@ -11,6 +11,9 @@ import { UserOnlineCache } from '../Cache/user-online.cache';
 import { ConversationParticipantsRepository } from '../Database/Repositories/conversation-participant.repository';
 import { BuildMessageUtils } from '../Utils/build-msg.utils';
 import { MessageDto } from '../Dto/chat-gateway-message.dto';
+import { MessageRepository } from '../Database/Repositories/message.repository';
+import mongoose from 'mongoose';
+import { MessageType } from '../Types/database-schmea.models';
 
 @Injectable()
 export class ChatService {
@@ -23,6 +26,7 @@ export class ChatService {
     private readonly _userOnlineCache: UserOnlineCache,
     private readonly _conversationParticipantsRepository: ConversationParticipantsRepository,
     private readonly _buildMessageUtils: BuildMessageUtils,
+    private readonly _messageRepository: MessageRepository,
   ) {
     const redisConfiguration = {
       host: configuration().redisConfiguration.host,
@@ -87,6 +91,14 @@ export class ChatService {
       if (!data.userId) {
         throw new BadRequestException();
       }
+
+      // Temporory storing will update will more robost techiniques sooner
+      await this._messageRepository.create({
+        conversation: new mongoose.Types.ObjectId(conversationId),
+        sender: new mongoose.Types.ObjectId(userId),
+        messageType: MessageType.TEXT,
+        content: text,
+      });
 
       this._pub.publish(
         'chatEvent',
