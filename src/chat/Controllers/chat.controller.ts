@@ -17,14 +17,13 @@ import { ChatHttpRequestService } from '../Services/chat-http-request.service';
 @UseGuards(AuthGuard)
 @Controller('chat')
 export class ChatController {
-  constructor(private readonly _chatHttpService: ChatHttpService,
-    private readonly _chatHttpRequestService: ChatHttpRequestService
+  constructor(
+    private readonly _chatHttpService: ChatHttpService,
+    private readonly _chatHttpRequestService: ChatHttpRequestService,
   ) {}
 
   @Get('conversation')
-  getConversations(
-    @Request() req
-  ) {
+  getConversations(@Request() req) {
     const userId = String(req.user.userId);
     return this._chatHttpService.getConversations(userId);
   }
@@ -59,7 +58,10 @@ export class ChatController {
     const userId = String(req.user.userId);
     const { otherUserId } = data;
 
-    return this._chatHttpRequestService.requestConversation(userId, otherUserId);
+    return this._chatHttpRequestService.requestConversation(
+      userId,
+      otherUserId,
+    );
   }
 
   @Get('requests')
