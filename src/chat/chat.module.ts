@@ -31,6 +31,7 @@ import {
   ChatGroupSchema,
 } from './Database/Schemas/chat-group.schmea';
 import { ChatHttpRequestService } from './Services/chat-http-request.service';
+import { ChatHttpMessageService } from './Services/chat-http-message.service';
 
 @Module({
   imports: [
@@ -74,7 +75,8 @@ import { ChatHttpRequestService } from './Services/chat-http-request.service';
     ChatDetailsRepository,
     ChatHttpService,
     RequestChatRepository,
-    ChatHttpRequestService
+    ChatHttpRequestService,
+    ChatHttpMessageService
   ],
 })
 export class ChatModule {}
