@@ -12,4 +12,12 @@ export class MessageRepository extends GenericRepository<Message> {
   ) {
     super(_messageModel);
   }
+
+  getConversationsMessage(conversationId: string, limit: number) {
+    const query = {
+      conversation: conversationId,
+    };
+
+    return this._messageModel.find(query).limit(limit).lean();
+  }
 }
