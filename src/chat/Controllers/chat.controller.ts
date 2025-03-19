@@ -1,5 +1,6 @@
 import {
   BadGatewayException,
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -13,6 +14,7 @@ import { AuthGuard } from 'src/guards/auth.guards';
 import { ChatFindConversaton } from '../Dto/chat-find-conversation.dto';
 import { RequestActionsDto } from '../Dto/request-actions.dto';
 import { ChatHttpRequestService } from '../Services/chat-http-request.service';
+import { ChatHttpMessageService } from '../Services/chat-http-message.service';
 
 @UseGuards(AuthGuard)
 @Controller('chat')
@@ -20,6 +22,7 @@ export class ChatController {
   constructor(
     private readonly _chatHttpService: ChatHttpService,
     private readonly _chatHttpRequestService: ChatHttpRequestService,
+    private readonly _chatHttpMessageService: ChatHttpMessageService,
   ) {}
 
   @Get('conversation')
@@ -76,5 +79,15 @@ export class ChatController {
     const userId = String(req.user.userId);
 
     return this._chatHttpRequestService.acceptRequests(userId, data);
+  }
+
+  @Get('conversation/messages')
+  getConversationMessage(
+    @Query('id')
+    conversationId: string,
+  ) {
+    if(!conversationId) throw new BadRequestException('Id Is Needed');
+
+    return this._chatHttpMessageService.getConversationMessage(conversationId);
   }
 }
