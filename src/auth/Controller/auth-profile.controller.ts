@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
 import { AuthProfileService } from '../Service/auth.profile.service';
 
@@ -10,5 +10,11 @@ export class AuthProfileController {
   @Get('users')
   getUsers() {
     return this._authProfileService.getUsers();
+  }
+
+  @Get('user')
+  getUser(@Request() req) {
+    const userId = String(req.user.userId);
+    return this._authProfileService.getUser(userId);
   }
 }

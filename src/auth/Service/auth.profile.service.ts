@@ -17,4 +17,14 @@ export class AuthProfileService {
       data,
     };
   }
+
+  async getUser(userId: string) {
+    const data = await this._userRepository.findUserWithId(userId);
+
+    return {
+      status: 'success',
+      message: 'successfully fetched',
+      data,
+    };
+  }
 }

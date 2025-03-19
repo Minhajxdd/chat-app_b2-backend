@@ -41,4 +41,8 @@ export class UserRepository
       .limit(limit)
       .exec();
   }
+
+  findUserWithId(userId: string) {
+    return this._userModel.findById(userId);
+  }
 }
