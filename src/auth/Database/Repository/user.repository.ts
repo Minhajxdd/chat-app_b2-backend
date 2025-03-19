@@ -43,6 +43,11 @@ export class UserRepository
   }
 
   findUserWithId(userId: string) {
-    return this._userModel.findById(userId);
+    return this._userModel.findById(userId, {
+      isAdmin: 0,
+      isBlocked: 0,
+      password: 0,
+      __v: 0,
+    });
   }
 }
