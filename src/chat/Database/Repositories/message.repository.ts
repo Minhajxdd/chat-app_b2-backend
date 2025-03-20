@@ -18,7 +18,7 @@ export class MessageRepository extends GenericRepository<Message> {
     skip: number,
     limit: number,
   ) {
-    // return this._messageModel.find(query).sort({ "createdAt": 1}).skip(skip).limit(limit).lean();
+    
     return this._messageModel.aggregate([
       {
         $match: {
