@@ -13,6 +13,7 @@ import {
 import { RefreshTokenRepository } from './Database/Repository/refresh-token.repository';
 import { TokenUtils } from './Utils/token.utils';
 import { AuthProfileController } from './Controller/auth-profile.controller';
+import { AuthProfileService } from './Service/auth.profile.service';
 
 @Module({
   imports: [
@@ -53,6 +54,8 @@ import { AuthProfileController } from './Controller/auth-profile.controller';
       provide: 'AuthService',
       useClass: AuthService,
     },
+    AuthProfileService
   ],
+  exports: ['UserRepository']
 })
 export class AuthModule {}
