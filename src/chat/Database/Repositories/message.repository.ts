@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { GenericRepository } from './generic.repository';
@@ -13,13 +13,49 @@ export class MessageRepository extends GenericRepository<Message> {
     super(_messageModel);
   }
 
-  getConversationsMessage(conversationId: string, skip: number, limit: number) {
-    const query = {
-      conversation: new mongoose.Types.ObjectId(conversationId),
-    };
-  
-    return this._messageModel.find(query).skip(skip).limit(limit).lean();
+  getConversationsMessage1(
+    conversationId: string,
+    skip: number,
+    limit: number,
+  ) {
+    // return this._messageModel.find(query).sort({ "createdAt": 1}).skip(skip).limit(limit).lean();
+    return this._messageModel.aggregate([
+      {
+        $match: {
+          conversation: new mongoose.Types.ObjectId(conversationId),
+        },
+      },
+      {
+        $sort: {
+          createdAt: 1,
+        },
+      },
+    ]);
   }
-  
-  
+  async getLatestMessages(conversationId: string, limit: number) {
+    return this._messageModel.aggregate([
+      { $match: { conversation: new mongoose.Types.ObjectId(conversationId) } },
+      { $sort: { createdAt: -1 } },
+      { $limit: limit },
+      { $sort: { createdAt: 1 } },
+    ]);
+  }
+
+  async getOlderMessages(
+    conversationId: string,
+    lastMessageId: string,
+    limit: number,
+  ) {
+    return this._messageModel.aggregate([
+      {
+        $match: {
+          conversation: new mongoose.Types.ObjectId(conversationId),
+          _id: { $lt: new mongoose.Types.ObjectId(lastMessageId) },
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      { $limit: limit },
+      { $sort: { createdAt: 1 } },
+    ]);
+  }
 }

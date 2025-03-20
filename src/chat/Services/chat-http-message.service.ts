@@ -6,23 +6,23 @@ import { MessageRepository } from '../Database/Repositories/message.repository';
 export class ChatHttpMessageService {
   constructor(private readonly _messageRepository: MessageRepository) {}
 
-  async getConversationMessages(
-    conversationId: string,
-    page: number,
-    limit: number,
-  ) {
-    const skip = (page - 1) * limit;
-
-    const messages = await this._messageRepository.getConversationsMessage(
-      conversationId,
-      skip,
-      limit,
-    );
-
+  async getConversationMessages(conversationId: string, lastMessageId: string | null, limit: number) {
+    let messages;
+  
+    if (!lastMessageId) {
+      
+      messages = await this._messageRepository.getLatestMessages(conversationId, limit);
+    } else {
+      messages = await this._messageRepository.getOlderMessages(conversationId, lastMessageId, limit);
+    }
+  
     return {
       status: 'success',
-      message: 'successfully fetched data',
+      message: 'Successfully fetched data',
       data: messages,
+      remaining: messages.length === limit,
     };
   }
+  
+  
 }
