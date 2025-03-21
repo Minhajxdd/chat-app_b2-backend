@@ -33,6 +33,7 @@ import {
 import { ChatHttpRequestService } from './Services/chat-http-request.service';
 import { ChatHttpMessageService } from './Services/chat-http-message.service';
 import { ChatGroupController } from './Controllers/chat-group-controller';
+import { ChatHttpGroupService } from './Services/chat-http-group.service';
 
 @Module({
   imports: [
@@ -77,7 +78,8 @@ import { ChatGroupController } from './Controllers/chat-group-controller';
     ChatHttpService,
     RequestChatRepository,
     ChatHttpRequestService,
-    ChatHttpMessageService
+    ChatHttpMessageService,
+    ChatHttpGroupService
   ],
 })
 export class ChatModule {}
