@@ -32,6 +32,7 @@ import {
 } from './Database/Schemas/chat-group.schmea';
 import { ChatHttpRequestService } from './Services/chat-http-request.service';
 import { ChatHttpMessageService } from './Services/chat-http-message.service';
+import { ChatGroupController } from './Controllers/chat-group-controller';
 
 @Module({
   imports: [
@@ -63,7 +64,7 @@ import { ChatHttpMessageService } from './Services/chat-http-message.service';
     ]),
     AuthModule,
   ],
-  controllers: [ChatController],
+  controllers: [ChatController, ChatGroupController],
   providers: [
     ChatService,
     ChatGateway,
