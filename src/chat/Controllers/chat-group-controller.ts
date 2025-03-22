@@ -1,7 +1,9 @@
-import { Body, Controller, Post, Request } from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ChatHttpGroupService } from '../Services/chat-http-group.service';
 import { ChatCreateGroupDto } from '../Dto/chat-create-group.dto';
+import { AuthGuard } from 'src/guards/auth.guards';
 
+@UseGuards(AuthGuard)
 @Controller('chat/group')
 export class ChatGroupController {
   constructor(private readonly _chatHttpGroupService: ChatHttpGroupService) {}
