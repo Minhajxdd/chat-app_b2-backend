@@ -50,4 +50,28 @@ export class ChatHttpGroupService {
       message: 'successfully group created',
     };
   }
+
+  async findConversation(
+    currentUserId: string,
+    otherUserId: string,
+    conversationId: string,
+  ) {
+    if (currentUserId == otherUserId) {
+      throw new BadRequestException('Invalid Request');
+    }
+
+    const data =
+      await this._conversationParticipantsRepository.findConversationWithType(
+        currentUserId,
+        otherUserId,
+        'group',
+        conversationId,
+      );
+
+    return {
+      status: 'success',
+      message: 'successfully checked for conversation',
+      data,
+    };
+  }
 }
