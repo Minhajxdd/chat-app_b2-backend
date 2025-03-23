@@ -40,8 +40,13 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
       .exec();
   }
 
-  async findConversationWithType(currentUserId: string, otherUserId: string, type: 'single' | 'group') {
-    return this._conversationParticipantModel.aggregate([
+  async findConversationWithType(
+    currentUserId: string,
+    otherUserId: string,
+    type: 'single' | 'group',
+    conversationId?: string,
+  ) {
+    let query = [
       {
         $match: {
           user: {
@@ -79,7 +84,21 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
           'conversation.type': type,
         },
       },
-    ]);
+      
+    ];
+
+    if(conversationId) {
+      const matchConversationQuery = {
+        $match: {
+          'conversation._id': new Types.ObjectId(conversationId),
+          'conversation.type': type,
+        },
+      };
+
+      query.push(matchConversationQuery);
+    }
+
+    return this._conversationParticipantModel.aggregate(query);
   }
 
   async getConversationWithUserId(userId: string) {
