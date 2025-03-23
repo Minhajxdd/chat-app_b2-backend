@@ -124,6 +124,14 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
         },
       },
       {
+        $lookup: {
+          from: 'chatgroups',
+          localField: 'conversation._id',
+          foreignField: 'conversation',
+          as: 'groupDetails',
+        },
+      },
+      {
         $set: {
           users: {
             $slice: [
