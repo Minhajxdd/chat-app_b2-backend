@@ -18,7 +18,7 @@ export class ChatHttpGroupService {
     private readonly _conversationRepository: ConversationRepository,
     private readonly _chatGroupRepository: ChatGroupRepository,
     private readonly _conversationParticipantsRepository: ConversationParticipantsRepository,
-    private readonly _requestChatRepository: RequestChatRepository
+    private readonly _requestChatRepository: RequestChatRepository,
   ) {}
 
   async createGroup(data: ChatCreateGroupDto, userId: string) {
@@ -78,27 +78,37 @@ export class ChatHttpGroupService {
     };
   }
 
-    async requestConversation(currentUserId: string, otherUserId: string) {
-      try {
-        if (currentUserId == otherUserId) {
-          throw new BadRequestException('Invalid Request');
-        }
-  
-        await this._requestChatRepository.create({
-          requestedBy: new mongoose.Types.ObjectId(currentUserId),
-          requestedTo: new mongoose.Types.ObjectId(otherUserId),
-          type: ConversationType.GROUP,
-        });
-  
-        // Implement Notification
-  
-        return {
-          status: 'success',
-          message: 'successfully sent request',
-        };
-      } catch (err) {
-        console.log(`Error while request conversation`);
-        throw new InternalServerErrorException();
+  async requestConversation(
+    currentUserId: string,
+    otherUserId: string,
+    conversationId?: string,
+  ) {
+    try {
+      if (currentUserId == otherUserId) {
+        throw new BadRequestException('Invalid Request');
       }
+
+      const query = {
+        requestedBy: new mongoose.Types.ObjectId(currentUserId),
+        requestedTo: new mongoose.Types.ObjectId(otherUserId),
+        type: ConversationType.GROUP,
+      };
+
+      if (conversationId) {
+        query['conversation'] = conversationId;
+      }
+
+      await this._requestChatRepository.create(query);
+
+      // Implement Notification
+
+      return {
+        status: 'success',
+        message: 'successfully sent request',
+      };
+    } catch (err) {
+      console.log(`Error while request conversation`);
+      throw new InternalServerErrorException();
     }
+  }
 }

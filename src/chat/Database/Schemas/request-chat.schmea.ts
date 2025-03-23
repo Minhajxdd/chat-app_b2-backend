@@ -15,6 +15,9 @@ export class RequestChat extends Document {
 
   @Prop({ type: String, enum: ConversationType, required: true })
   type: ConversationType;
+
+  @Prop({ type: Types.ObjectId, ref: 'conversations' })
+  conversation?: Types.ObjectId;
 }
 
 export const RequestChatSchema = SchemaFactory.createForClass(RequestChat);

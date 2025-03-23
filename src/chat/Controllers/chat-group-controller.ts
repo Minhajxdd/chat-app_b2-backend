@@ -28,11 +28,12 @@ export class ChatGroupController {
   @Post('request-conversation')
   requestConversation(@Request() req, @Body() data: ChatFindConversaton) {
     const userId = String(req.user.userId);
-    const { otherUserId } = data;
+    const { otherUserId, conversationId } = data;
 
     return this._chatHttpGroupService.requestConversation(
       userId,
       otherUserId,
+      conversationId
     );
   }
 }
