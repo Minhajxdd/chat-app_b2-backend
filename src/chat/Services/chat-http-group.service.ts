@@ -8,12 +8,14 @@ import { ConversationRepository } from '../Database/Repositories/conversation.re
 import { ConversationType } from '../Types/database-schmea.models';
 import { ChatGroupRepository } from '../Database/Repositories/chat-group.repository';
 import mongoose from 'mongoose';
+import { ConversationParticipantsRepository } from '../Database/Repositories/conversation-participant.repository';
 
 @Injectable()
 export class ChatHttpGroupService {
   constructor(
     private readonly _conversationRepository: ConversationRepository,
     private readonly _chatGroupRepository: ChatGroupRepository,
+    private readonly _conversationParticipantsRepository: ConversationParticipantsRepository,
   ) {}
 
   async createGroup(data: ChatCreateGroupDto, userId: string) {
@@ -29,6 +31,11 @@ export class ChatHttpGroupService {
 
     const newConversations = await this._conversationRepository.create({
       type: ConversationType.GROUP,
+    });
+
+    await this._conversationParticipantsRepository.create({
+      conversation: new mongoose.Types.ObjectId(String(newConversations._id)),
+      user: new mongoose.Types.ObjectId(String(userId)),
     });
 
     const newGroup = await this._chatGroupRepository.create({
