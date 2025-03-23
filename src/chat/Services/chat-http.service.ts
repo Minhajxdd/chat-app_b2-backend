@@ -37,9 +37,10 @@ export class ChatHttpService {
     }
 
     const data =
-      await this._conversationParticipantsRepository.findSingleConversation(
+      await this._conversationParticipantsRepository.findConversationWithType(
         currentUserId,
         otherUserId,
+        'single'
       );
 
     return {

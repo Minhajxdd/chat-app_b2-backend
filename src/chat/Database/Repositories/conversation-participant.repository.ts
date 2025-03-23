@@ -40,7 +40,7 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
       .exec();
   }
 
-  async findSingleConversation(currentUserId: string, otherUserId: string) {
+  async findConversationWithType(currentUserId: string, otherUserId: string, type: 'single' | 'group') {
     return this._conversationParticipantModel.aggregate([
       {
         $match: {
@@ -76,7 +76,7 @@ export class ConversationParticipantsRepository extends GenericRepository<Conver
       },
       {
         $match: {
-          'conversation.type': 'single',
+          'conversation.type': type,
         },
       },
     ]);
