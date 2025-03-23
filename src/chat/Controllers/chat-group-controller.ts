@@ -24,4 +24,15 @@ export class ChatGroupController {
 
     return this._chatHttpGroupService.findConversation(userId, otherUserId, conversationId);
   }
+
+  @Post('request-conversation')
+  requestConversation(@Request() req, @Body() data: ChatFindConversaton) {
+    const userId = String(req.user.userId);
+    const { otherUserId } = data;
+
+    return this._chatHttpGroupService.requestConversation(
+      userId,
+      otherUserId,
+    );
+  }
 }

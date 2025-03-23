@@ -2,6 +2,7 @@ import {
   BadGatewayException,
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ChatCreateGroupDto } from '../Dto/chat-create-group.dto';
 import { ConversationRepository } from '../Database/Repositories/conversation.repository';
@@ -9,6 +10,7 @@ import { ConversationType } from '../Types/database-schmea.models';
 import { ChatGroupRepository } from '../Database/Repositories/chat-group.repository';
 import mongoose from 'mongoose';
 import { ConversationParticipantsRepository } from '../Database/Repositories/conversation-participant.repository';
+import { RequestChatRepository } from '../Database/Repositories/request-chat.repository';
 
 @Injectable()
 export class ChatHttpGroupService {
@@ -16,6 +18,7 @@ export class ChatHttpGroupService {
     private readonly _conversationRepository: ConversationRepository,
     private readonly _chatGroupRepository: ChatGroupRepository,
     private readonly _conversationParticipantsRepository: ConversationParticipantsRepository,
+    private readonly _requestChatRepository: RequestChatRepository
   ) {}
 
   async createGroup(data: ChatCreateGroupDto, userId: string) {
@@ -74,4 +77,28 @@ export class ChatHttpGroupService {
       data,
     };
   }
+
+    async requestConversation(currentUserId: string, otherUserId: string) {
+      try {
+        if (currentUserId == otherUserId) {
+          throw new BadRequestException('Invalid Request');
+        }
+  
+        await this._requestChatRepository.create({
+          requestedBy: new mongoose.Types.ObjectId(currentUserId),
+          requestedTo: new mongoose.Types.ObjectId(otherUserId),
+          type: ConversationType.GROUP,
+        });
+  
+        // Implement Notification
+  
+        return {
+          status: 'success',
+          message: 'successfully sent request',
+        };
+      } catch (err) {
+        console.log(`Error while request conversation`);
+        throw new InternalServerErrorException();
+      }
+    }
 }
