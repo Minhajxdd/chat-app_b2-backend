@@ -81,26 +81,42 @@ export class ChatHttpRequestService {
         };
       }
 
-      const newConversation = await this._conversationRepository.create({
-        type: request.type,
-      });
+      if(request.type === 'single') {
+        const newConversation = await this._conversationRepository.create({
+          type: request.type,
+        });
+  
+        let { _id: newConversationId } = newConversation;
+  
+        await this._conversationParticipantsRepository.create({
+          conversation: new mongoose.Types.ObjectId(String(newConversationId)),
+          user: request.requestedBy,
+        });
+  
+        await this._conversationParticipantsRepository.create({
+          conversation: new mongoose.Types.ObjectId(String(newConversationId)),
+          user: request.requestedTo,
+        });
+  
+        return {
+          status: 'success',
+          message: 'successfull added conversation',
+        };
 
-      let { _id: newConversationId } = newConversation;
+      } else {
+        const { conversation } = request;
 
-      await this._conversationParticipantsRepository.create({
-        conversation: new mongoose.Types.ObjectId(String(newConversationId)),
-        user: request.requestedBy,
-      });
+        await this._conversationParticipantsRepository.create({
+          conversation: new mongoose.Types.ObjectId(String(conversation)),
+          user: request.requestedTo,
+        });
 
-      await this._conversationParticipantsRepository.create({
-        conversation: new mongoose.Types.ObjectId(String(newConversationId)),
-        user: request.requestedTo,
-      });
+        return {
+          status: 'success',
+          message: 'successfull added conversation',
+        };
+      }
 
-      return {
-        status: 'success',
-        message: 'successfull added conversation',
-      };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException();
