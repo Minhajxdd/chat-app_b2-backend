@@ -21,25 +21,25 @@ jobs:
       - name: Publish image to docker hub
         run: docker push minhajxdd/chat-b2-backend
 
-  deploy:
-    needs: build
-    runs-on: self-hosted
-    steps:
-      - name: Move to configuration director
-        working-directory: /home/ubuntu/chat-app/backend
-        run: |
-          echo "Working directory set"
+  # deploy:
+  #   needs: build
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Move to configuration director
+  #       working-directory: /home/ubuntu/chat-app/backend
+  #       run: |
+  #         echo "Working directory set"
 
-      - name: Stop Docker compose
-        working-directory: /home/ubuntu/chat-app/backend
-        run: docker compose down
+  #     - name: Stop Docker compose
+  #       working-directory: /home/ubuntu/chat-app/backend
+  #       run: docker compose down
       
-      - name: Delete old container
-        run: docker rm -f chat-backend-container || true
+  #     - name: Delete old container
+  #       run: docker rm -f chat-backend-container || true
 
-      - name: Remove old image
-        run: docker rmi minhajxdd/chat-b2-backend || true
+  #     - name: Remove old image
+  #       run: docker rmi minhajxdd/chat-b2-backend || true
       
-      - name: Run Docker compose
-        working-directory: /home/ubuntu/chat-app/backend
-        run: docker compose up -d
+  #     - name: Run Docker compose
+  #       working-directory: /home/ubuntu/chat-app/backend
+  #       run: docker compose up -d
