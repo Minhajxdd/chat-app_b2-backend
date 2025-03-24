@@ -118,12 +118,12 @@ export class ChatService {
     } else if (messageType === 'group') {
 
       // Temporory storing will update will more robost techiniques sooner
-      // await this._messageRepository.create({
-      //   conversation: new mongoose.Types.ObjectId(conversation),
-      //   sender: new mongoose.Types.ObjectId(userId),
-      //   messageType: MessageType.TEXT,
-      //   content,
-      // });
+      await this._messageRepository.create({
+        conversation: new mongoose.Types.ObjectId(conversation),
+        sender: new mongoose.Types.ObjectId(userId),
+        messageType: MessageType.TEXT,
+        content,
+      });
 
       this._pub.publish(
         'chatEvent',
