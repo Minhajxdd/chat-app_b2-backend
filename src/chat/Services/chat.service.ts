@@ -46,9 +46,11 @@ export class ChatService {
 
         if (event === 'message') {
           this.server?.to(room).emit('message', { data });
-        } else if (event === 'message') {
-          this.server?.to(room).emit('message', data);
-        } else if (event === 'edit-message') {
+        }  else if (event === 'message-room') {
+
+          this.server?.to(room).emit('message', { data });
+        }
+        else if (event === 'edit-message') {
           this.server?.to(room).emit('edit-message', data);
         } else if (event === 'delete-message') {
           this.server?.to(room).emit('delete-message', data);
@@ -73,13 +75,18 @@ export class ChatService {
         userId,
       );
 
-    console.log(groups);
+    if(groups) {
+      groups.forEach((group) => {
+        client.join(String(group._id));
+      })
+    }
+    
 
     //Will Implement Later
   }
 
   async message(client: Socket, data: MessageDto, userId: string) {
-    const { content, conversation, messageType} = data;
+    const { content, conversation, messageType } = data;
 
     const buildedMessage = this._buildMessageUtils.buildMsg(
       conversation,
@@ -100,13 +107,29 @@ export class ChatService {
         content,
       });
 
-      
-
       this._pub.publish(
         'chatEvent',
         JSON.stringify({
           event: 'message',
           room: data.userId,
+          data: buildedMessage,
+        }),
+      );
+    } else if (messageType === 'group') {
+
+      // Temporory storing will update will more robost techiniques sooner
+      // await this._messageRepository.create({
+      //   conversation: new mongoose.Types.ObjectId(conversation),
+      //   sender: new mongoose.Types.ObjectId(userId),
+      //   messageType: MessageType.TEXT,
+      //   content,
+      // });
+
+      this._pub.publish(
+        'chatEvent',
+        JSON.stringify({
+          event: 'message-room',
+          room: conversation,
           data: buildedMessage,
         }),
       );
