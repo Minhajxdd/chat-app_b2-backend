@@ -46,8 +46,8 @@ export class ChatService {
 
         if (event === 'message') {
           this.server?.to(room).emit('message', { data });
-        }  else if (event === 'message-room') {
-
+        }  
+        else if (event === 'message-room') {
           this.server?.to(room).emit('message', { data });
         }
         else if (event === 'edit-message') {
