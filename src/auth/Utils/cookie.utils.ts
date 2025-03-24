@@ -30,6 +30,7 @@ export class CookieUtils implements ICookieUtils {
 
       if (isProduction) {
         option += 'Secure;';
+        option += 'Partitioned;';
       }
 
       if (domain) {
@@ -54,6 +55,7 @@ export class CookieUtils implements ICookieUtils {
 
       if (isProduction) {
         option += 'Secure;';
+        option += 'Partitioned;';
       }
 
       if (domain) {
