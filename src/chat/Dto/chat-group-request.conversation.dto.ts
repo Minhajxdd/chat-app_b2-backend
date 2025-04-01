@@ -1,7 +1,10 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class ChatFindConversaton {
+export class ChatGroupRequestConversationDto {
     @IsNotEmpty()
     @IsString()
     otherUserId: string;
+
+    @IsString()
+    conversationId?: string;
 }

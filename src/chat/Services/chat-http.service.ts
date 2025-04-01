@@ -32,6 +32,8 @@ export class ChatHttpService {
   }
 
   async findConversation(currentUserId: string, otherUserId: string) {
+
+    console.log(currentUserId, ' ',otherUserId)
     if (currentUserId == otherUserId) {
       throw new BadRequestException('Invalid Request');
     }
