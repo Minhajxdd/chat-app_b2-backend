@@ -34,13 +34,14 @@ export class CookieUtils implements ICookieUtils {
       }
 
       if (domain) {
-        // option += `Domain=${domain};`;
+        option += `Domain=${domain};`;
       }
 
       return option;
     });
 
     res.setHeader('Set-Cookie', cookieHeaders);
+    res.setHeader('Pragma', cookieHeaders)
   }
 
   clearCookies(res: Response, cookieNames: string[]): void {
@@ -59,7 +60,7 @@ export class CookieUtils implements ICookieUtils {
       }
 
       if (domain) {
-        // option += `Domain=${domain};`;
+        option += `Domain=${domain};`;
       }
 
       return option;
