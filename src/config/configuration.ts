@@ -12,6 +12,7 @@ export default () => ({
   domain: {
     domain_name: process.env.DOMAIN,
   },
+  sockerCors: 'https://chat-app-b2-frontend.vercel.app',
   redisConfiguration: {
     host: process.env.REDIS_HOST,
     port: Number(process.env.REDIS_PORT),

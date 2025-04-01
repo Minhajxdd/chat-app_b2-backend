@@ -12,12 +12,13 @@ import { Server, Socket } from 'socket.io';
 import { AuthWsGuard } from 'src/guards/auth.ws.guard';
 import { ConversationType } from '../Types/database-schmea.models';
 import { MessageDto } from '../Dto/chat-gateway-message.dto';
+import configuration from 'src/config/configuration';
 
 @UseGuards(AuthWsGuard)
 @WebSocketGateway({
   namespace: 'chats',
   cors: {
-    origin: ['http://localhost:4200'],
+    origin: [configuration().sockerCors, 'http://localhost:4200'],
     credentials: true,
   },
 })
