@@ -16,12 +16,13 @@ import {
       context: ExecutionContext,
     ): boolean | Promise<boolean> | Observable<boolean> {
       const request = context.switchToHttp().getRequest();
+      const authHeader = request.headers.authorization;
 
-      if(!request || !request.cookies) {
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
         throw new UnauthorizedException('Invalid Token');
       }
-
-      const token = request.cookies['access_token'];
+  
+      const token = authHeader.split(' ')[1];
   
       if (!token) {
         throw new UnauthorizedException('Invalid Token');

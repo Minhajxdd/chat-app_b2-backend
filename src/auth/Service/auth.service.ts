@@ -66,6 +66,7 @@ export class AuthService implements IAuthService {
     res.json({
       status: 'sucess',
       message: 'successfully user Registered',
+      accessToken
     });
   }
 
@@ -95,21 +96,22 @@ export class AuthService implements IAuthService {
       String(user._id),
     );
 
-    this._cookieUtils.setCookie(res, [
-      {
-        name: 'refresh_token',
-        value: refreshToken,
-      },
-      {
-        name: 'access_token',
-        value: accessToken,
-        options: { maxAge: 5 * 60 * 1000 },
-      },
-    ]);
+    // this._cookieUtils.setCookie(res, [
+    //   {
+    //     name: 'refresh_token',
+    //     value: refreshToken,
+    //   },
+    //   {
+    //     name: 'access_token',
+    //     value: accessToken,
+    //     options: { maxAge: 5 * 60 * 1000 },
+    //   },
+    // ]);
 
     res.status(HttpStatus.OK).json({
       status: 'success',
       message: 'Logged in successfully',
+      accessToken
     });
   }
 
